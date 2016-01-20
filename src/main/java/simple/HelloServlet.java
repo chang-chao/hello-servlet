@@ -1,4 +1,4 @@
-
+package simple;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(value = "/")
+@WebServlet(name = "hello", value = "/hello")
 public class HelloServlet extends HttpServlet {
 
 	@Override
