@@ -1,9 +1,8 @@
 package async;
 
-import java.util.Queue;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.AsyncContext;
-import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +12,22 @@ import javax.servlet.http.HttpServletResponse;
 public class AsyncServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
-		AsyncContext aCtx = request.startAsync(request, response);
-		ServletContext appScope = request.getServletContext();
-		((Queue<AsyncContext>) appScope.getAttribute("jobQueue")).add(aCtx);
+		final AsyncContext ac = request.startAsync(request, response);
+		ac.start(new Runnable() {
+			@Override
+			public void run() {
+				// get parameteres
+				// invoke a Web service endpoint
+				// set results
+				try {
+					Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+					ac.getResponse().getWriter().write("finished");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				ac.complete();
+
+			}
+		});
 	}
 }
